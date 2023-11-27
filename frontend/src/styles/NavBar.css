@@ -1,0 +1,26 @@
+.nav-bar {
+    background-color: slategrey;
+    padding: 10px;
+}
+
+.nav-list {
+    list-style: none;
+    padding: 0;
+    display: flex;
+}
+
+.nav-item {
+    margin-right: 15px;
+}
+
+.nav-item a {
+    text-decoration: none;
+    color: white;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.nav-item a:hover {
+    color: #ffcc00;
+    /* Change the color on hover */
+}
