@@ -80,6 +80,7 @@ try:
             },
             "gyroscope": {"x": gyroscope_x, "y": gyroscope_y, "z": gyroscope_z},
         }
+        print(data)
         ws.send(json.dumps(data))
 
         # Add a delay to control the update rate
