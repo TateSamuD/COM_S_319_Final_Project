@@ -8,7 +8,7 @@ from pymongo import MongoClient, ReplaceOne
 sensor = mpu6050(0x68)  # Use the correct I2C address of the sensor
 
 # MongoDB configuration
-mongo_client = MongoClient("mongodb://127.7.0.1:27017")  # Replace with your MongoDB URI
+mongo_client = MongoClient("10.30.161.67","27017")  # Replace with your MongoDB URI
 database = mongo_client["mpu6050sensor"]  # Replace with your database name
 collection = database["sensor_data"]  # Replace with your collection name
 
