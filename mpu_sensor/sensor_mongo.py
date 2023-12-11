@@ -2,7 +2,7 @@ import os
 import time
 import json
 from mpu6050 import mpu6050
-from pymongo import MongoClient
+from pymongo import MongoClient, ReplaceOne
 
 # Initialize MPU6050 sensor
 sensor = mpu6050(0x68)  # Use the correct I2C address of the sensor
