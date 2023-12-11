@@ -20,12 +20,16 @@ def read_and_save():
         while True:
             accel = sensor.get_accel_data()
             gyro = sensor.get_gyro_data()
-            temperature = sensor.get_temp()
+            temperature = round(sensor.get_temp())  # Round temperature to the nearest whole number
 
-            # Create a dictionary to store the data
+            # Round accelerometer and gyroscope readings to the nearest whole number
+            accel_rounded = {axis: round(value) for axis, value in accel.items()}
+            gyro_rounded = {axis: round(value) for axis, value in gyro.items()}
+
+            # Create a dictionary to store the rounded data
             sensor_data = {
-                "accelerometer": {"x": accel["x"], "y": accel["y"], "z": accel["z"]},
-                "gyroscope": {"x": gyro["x"], "y": gyro["y"], "z": gyro["z"]},
+                "accelerometer": accel_rounded,
+                "gyroscope": gyro_rounded,
                 "temperature": temperature,
                 "timestamp": time.time(),  # Add a timestamp for each reading
             }
@@ -33,9 +37,20 @@ def read_and_save():
             # Print gyroscope reading
             print("Gyroscope Reading:", sensor_data["gyroscope"])
 
-            # Insert data into MongoDB collection
-            collection.insert_one(sensor_data)
-            print("Adding to MongoDB")
+            # Update or insert data into MongoDB collection
+            update_filter = {"timestamp": sensor_data["timestamp"]}
+            update_statement = {
+                "$set": sensor_data
+            }
+
+            # Using ReplaceOne with upsert=True to insert if document doesn't exist
+            update_operation = ReplaceOne(update_filter, update_statement, upsert=True)
+            collection.bulk_write([update_operation])
+            print("Updating MongoDB")
+            
+            # # Insert data into MongoDB collection
+            # collection.insert_one(sensor_data)
+            # print("Adding to MongoDB")
 
             time.sleep(DELAY)
 
