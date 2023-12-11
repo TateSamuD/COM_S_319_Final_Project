@@ -29,7 +29,6 @@ def data_folder():
     return folder_name
 
 
-
 ### Function to read sensor data and append to JSON file
 def read_and_save():
     try:
@@ -38,14 +37,23 @@ def read_and_save():
         while True:
             accel = sensor.get_accel_data()
             gyro = sensor.get_gyro_data()
-            temperature = sensor.get_temp()
+            temperature = round(sensor.get_temp())  # Round temperature to the nearest whole number
 
-            #### Create a dictionary to store the data
+            # Round accelerometer and gyroscope readings to the nearest whole number
+            # accel_rounded = {axis: round(value) for axis, value in accel.items()}
+            gyro_rounded = {axis: round(value) for axis, value in gyro.items()}
+
+            # Create a dictionary to store the rounded data
             sensor_data = {
-                "accelerometer": {"x": accel["x"], "y": accel["y"], "z": accel["z"]},
-                # "gyroscope": {"x": gyro["x"], "y": gyro["y"], "z": gyro["z"]},
+                # "accelerometer": accel_rounded,
+                "gyroscope": gyro_rounded,
                 # "temperature": temperature,
+                "timestamp": time.time(),  # Add a timestamp for each reading
             }
+
+
+            # Print gyroscope reading
+            print("Gyroscope Reading:", sensor_data["gyroscope"])
 
             #### Append data to the current JSON file
             if os.path.exists(filename):
