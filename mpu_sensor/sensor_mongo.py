@@ -18,46 +18,52 @@ DELAY = 1
 def read_and_save():
     try:
         while True:
-            accel = sensor.get_accel_data()
-            gyro = sensor.get_gyro_data()
-            temperature = round(
-                sensor.get_temp()
-            )  # Round temperature to the nearest whole number
+            try:
+                accel = sensor.get_accel_data()
+                gyro = sensor.get_gyro_data()
+                temperature = round(
+                    sensor.get_temp()
+                )  # Round temperature to the nearest whole number
 
-            # Round accelerometer and gyroscope readings to the nearest whole number
-            accel_rounded = {axis: round(value) for axis, value in accel.items()}
-            gyro_rounded = {axis: round(value) for axis, value in gyro.items()}
+                # Round accelerometer and gyroscope readings to the nearest whole number
+                accel_rounded = {axis: round(value) for axis, value in accel.items()}
+                gyro_rounded = {axis: round(value) for axis, value in gyro.items()}
 
-            # Create a dictionary to store the rounded data
-            sensor_data = {
-                "accelerometer": accel_rounded,
-                "gyroscope": gyro_rounded,
-                "temperature": temperature,
-                "timestamp": time.time(),  # Add a timestamp for each reading
-            }
+                # Create a dictionary to store the rounded data
+                sensor_data = {
+                    "accelerometer": accel_rounded,
+                    "gyroscope": gyro_rounded,
+                    "temperature": temperature,
+                    "timestamp": time.time(),  # Add a timestamp for each reading
+                }
 
-            # Print gyroscope reading
-            print("Gyroscope Reading:", sensor_data["gyroscope"])
+                # Print gyroscope reading
+                print("Gyroscope Reading:", sensor_data["gyroscope"])
 
-            # Update or insert data into MongoDB collection
-            update_filter = {"timestamp": sensor_data["timestamp"]}
-            # Remove the "$" operators from the replacement document
-            update_statement = {
-                key: value
-                for key, value in sensor_data.items()
-                if not key.startswith("$")
-            }
+                # Update or insert data into MongoDB collection
+                update_filter = {"timestamp": sensor_data["timestamp"]}
+                # Remove the "$" operators from the replacement document
+                update_statement = {
+                    key: value
+                    for key, value in sensor_data.items()
+                    if not key.startswith("$")
+                }
 
-            # Using ReplaceOne with upsert=True to insert if document doesn't exist
-            update_operation = ReplaceOne(update_filter, update_statement, upsert=True)
-            collection.bulk_write([update_operation])
-            print("Updating MongoDB")
+                # Using ReplaceOne with upsert=True to insert if document doesn't exist
+                update_operation = ReplaceOne(update_filter, update_statement, upsert=True)
+                collection.bulk_write([update_operation])
+                print("Updating MongoDB")
 
-            # # Insert data into MongoDB collection
-            # collection.insert_one(sensor_data)
-            # print("Adding to MongoDB")
+                # # Insert data into MongoDB collection
+                # collection.insert_one(sensor_data)
+                # print("Adding to MongoDB")
 
-            time.sleep(DELAY)
+                time.sleep(DELAY)
+
+            except ServerSelectionTimeoutError:
+                print("Connection to MongoDB failed. Retrying...")
+                time.sleep(DELAY)
+                continue
 
     except KeyboardInterrupt:
         pass
