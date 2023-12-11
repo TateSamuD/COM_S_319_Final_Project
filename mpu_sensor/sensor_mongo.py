@@ -20,7 +20,9 @@ def read_and_save():
         while True:
             accel = sensor.get_accel_data()
             gyro = sensor.get_gyro_data()
-            temperature = round(sensor.get_temp())  # Round temperature to the nearest whole number
+            temperature = round(
+                sensor.get_temp()
+            )  # Round temperature to the nearest whole number
 
             # Round accelerometer and gyroscope readings to the nearest whole number
             accel_rounded = {axis: round(value) for axis, value in accel.items()}
@@ -39,15 +41,18 @@ def read_and_save():
 
             # Update or insert data into MongoDB collection
             update_filter = {"timestamp": sensor_data["timestamp"]}
+            # Remove the "$" operators from the replacement document
             update_statement = {
-                "$set": sensor_data
+                key: value
+                for key, value in sensor_data.items()
+                if not key.startswith("$")
             }
 
             # Using ReplaceOne with upsert=True to insert if document doesn't exist
             update_operation = ReplaceOne(update_filter, update_statement, upsert=True)
             collection.bulk_write([update_operation])
             print("Updating MongoDB")
-            
+
             # # Insert data into MongoDB collection
             # collection.insert_one(sensor_data)
             # print("Adding to MongoDB")
