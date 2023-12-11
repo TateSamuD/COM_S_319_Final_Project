@@ -18,7 +18,11 @@ const Data = () => {
         console.error("Error fetching sensor data:", error);
       }
     };
-    fetchData();
+    // Fetch data periodically (adjust the interval as needed)
+    const interval = setInterval(fetchData, 1000);
+
+    // Clean up the interval on component unmount
+    return () => clearInterval(interval);
   }, []);
 
   useEffect(() => {
