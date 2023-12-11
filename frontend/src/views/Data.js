@@ -8,19 +8,41 @@ extend({ OrbitControls });
 const InteractiveCubes = () => {
   const controlsRef = useRef();
   const [intersects, setIntersects] = useState(null);
-  const [rotationData, setRotationData] = useState({ x: 0, y: 0, z: 0 });
+  const [gyroscopeReadings, setGyroscopeReadings] = useState([]);
+  const [currentReadingIndex, setCurrentReadingIndex] = useState(0);
 
   const { camera, scene, raycaster } = useThree();
 
   useEffect(() => {
-    // Fetch rotation data from an external JSON file
-    fetch("...")
-      .then((response) => response.json())
-      .then((data) => setRotationData(data))
-      .catch((error) => console.error("Error fetching rotation data:", error));
-  }, []);
+    const fetchData = async () => {
+      try {
+        const response = await fetch(
+          "..../mpu_sensor/sensor_data/mpu6050_data.json"
+        );
+        const data = await response.json();
+        setGyroscopeReadings(data.sensor_data);
+      } catch (error) {
+        console.error("Error loading JSON file:", error);
+      }
+    };
+
+    fetchData();
+  }, []); // Empty dependency array ensures the effect runs only once on mount
+
   useFrame(() => {
     controlsRef.current.update();
+
+    // Update rotation values based on gyroscope readings
+    if (gyroscopeReadings.length > 0) {
+      const { x, y, z } = gyroscopeReadings[currentReadingIndex].gyroscope;
+      setIntersects(null); // Reset intersects for simplicity
+
+      // Update rotation values
+      setCurrentReadingIndex(
+        (prevIndex) => (prevIndex + 1) % gyroscopeReadings.length
+      );
+      controlsRef.current.target.set(x, y, z);
+    }
   });
 
   const handlePointerMove = (event) => {
@@ -37,7 +59,7 @@ const InteractiveCubes = () => {
 
   return (
     <>
-      <mesh rotation={[rotationData.x, rotationData.y, rotationData.z]}>
+      <mesh rotation={[0, 0, 0]}>
         <boxGeometry args={[1, 1, 1]} />
         <meshLambertMaterial
           color={intersects ? 0xff0000 : Math.random() * 0xffffff}
