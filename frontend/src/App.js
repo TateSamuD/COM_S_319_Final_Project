@@ -2,7 +2,7 @@ import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import NavBar from "./components/NavBar";
 import Home from "./views/Home";
-import Data from "./views/Data";
+import Data from "./views/Data_v2";
 import About from "./views/About";
 
 const App = () => {
@@ -10,9 +10,9 @@ const App = () => {
     <Router>
       <NavBar />
       <Routes>
-        <Route path="/" exact element={Home} />
-        <Route path="/Data" element={Data} />
-        <Route path="/About" element={About} />
+        <Route path="/" exact Component={Home} />
+        <Route path="/Data" Component={Data} />
+        <Route path="/About" Component={About} />
       </Routes>
     </Router>
   );

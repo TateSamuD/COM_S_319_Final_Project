@@ -1,86 +1,123 @@
-// Author: Tatenda Samudzi
-// ISU Netid : tdsamu@iastate.edu
-// Date :  November 28, 2023
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
+import { Canvas, extend, useFrame, useThree } from "react-three-fiber";
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import * as THREE from "three";
 
-const Data = () => {
-  const [sensorData, setSensorData] = useState(null);
+extend({ OrbitControls });
+
+const InteractiveCubes = () => {
+  const controlsRef = useRef();
+  const [intersects, setIntersects] = useState(null);
+  const [gyroscopeReadings, setGyroscopeReadings] = useState([]);
+  const [currentReadingIndex, setCurrentReadingIndex] = useState(0);
+
+  const { camera, scene, raycaster } = useThree();
 
   useEffect(() => {
-    const apiUrl = "http://localhost:8081/showData";
     const fetchData = async () => {
       try {
-        const response = await fetch(apiUrl);
+        const response = await fetch(
+          "..../mpu_sensor/sensor_data/mpu6050_data.json"
+        );
         const data = await response.json();
-        setSensorData(data);
+        setGyroscopeReadings(data.sensor_data);
       } catch (error) {
-        console.error("Error fetching sensor data:", error);
+        console.error("Error loading JSON file:", error);
       }
     };
-    // Fetch data periodically (adjust the interval as needed)
-    const interval = setInterval(fetchData, 1000);
 
-    // Clean up the interval on component unmount
-    return () => clearInterval(interval);
-  }, []);
+    fetchData();
+  }, []); // Empty dependency array ensures the effect runs only once on mount
 
-  useEffect(() => {
-    if (!sensorData) return;
+  useFrame(() => {
+    controlsRef.current.update();
 
-    // Initialize Three.js scene
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-    const renderer = new THREE.WebGLRenderer();
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    document.body.appendChild(renderer.domElement);
+    // Update rotation values based on gyroscope readings
+    if (gyroscopeReadings.length > 0) {
+      const { x, y, z } = gyroscopeReadings[currentReadingIndex].gyroscope;
+      setIntersects(null); // Reset intersects for simplicity
 
-    // Create a cube
-    const geometry = new THREE.BoxGeometry();
-    const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
-    const cube = new THREE.Mesh(geometry, material);
-    scene.add(cube);
+      // Update rotation values
+      setCurrentReadingIndex(
+        (prevIndex) => (prevIndex + 1) % gyroscopeReadings.length
+      );
+      controlsRef.current.target.set(x, y, z);
+    }
+  });
 
-    // Set initial camera position
-    camera.position.z = 5;
+  const handlePointerMove = (event) => {
+    const pointer = new THREE.Vector2();
+    pointer.x = (event.clientX / window.innerWidth) * 2 - 1;
+    pointer.y = -(event.clientY / window.innerHeight) * 2 + 1;
 
-    // Update cube rotation based on gyroscope data
-    const updateCubeRotation = () => {
-      if (!cube || !sensorData.sensor_data) return;
+    raycaster.setFromCamera(pointer, camera);
 
-      const gyroscopeData = sensorData.sensor_data[sensorData.sensor_data.length - 1].gyroscope;
+    const newIntersects = raycaster.intersectObjects(scene.children, false);
 
-      cube.rotation.x += gyroscopeData.x * 0.01;
-      cube.rotation.y += gyroscopeData.y * 0.01;
-      cube.rotation.z += gyroscopeData.z * 0.01;
+    setIntersects(newIntersects.length > 0 ? newIntersects[0].object : null);
+  };
 
-      renderer.render(scene, camera);
-      requestAnimationFrame(updateCubeRotation);
-    };
-
-    // Start updating cube rotation
-    updateCubeRotation();
-
-    // Handle window resize
-    const handleResize = () => {
-      const newWidth = window.innerWidth;
-      const newHeight = window.innerHeight;
-
-      camera.aspect = newWidth / newHeight;
-      camera.updateProjectionMatrix();
-
-      renderer.setSize(newWidth, newHeight);
-    };
-
-    window.addEventListener('resize', handleResize);
-
-    // Clean up on component unmount
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
-  }, [sensorData]);
-
-  return <></>;
+  return (
+    <>
+      <mesh rotation={[0, 0, 0]}>
+        <boxGeometry args={[1, 1, 1]} />
+        <meshLambertMaterial
+          color={intersects ? 0xff0000 : Math.random() * 0xffffff}
+        />
+      </mesh>
+      <group>
+        {Array.from({ length: 2000 }).map((_, index) => (
+          <mesh
+            key={index}
+            position={[
+              Math.random() * 40 - 20,
+              Math.random() * 40 - 20,
+              Math.random() * 40 - 20,
+            ]}
+            rotation={[
+              Math.random() * 2 * Math.PI,
+              Math.random() * 2 * Math.PI,
+              Math.random() * 2 * Math.PI,
+            ]}
+            scale={[
+              Math.random() + 0.5,
+              Math.random() + 0.5,
+              Math.random() + 0.5,
+            ]}
+          >
+            <boxGeometry args={[1, 1, 1]} />
+            <meshLambertMaterial color={Math.random() * 0xffffff} />
+          </mesh>
+        ))}
+      </group>
+      <OrbitControls ref={controlsRef} args={[camera]} />
+      <mesh position={[0, 0, -50]}>
+        <orthographicCamera
+          makeDefault
+          left={-25}
+          right={25}
+          top={25}
+          bottom={-25}
+          near={0.1}
+          far={100}
+          position={[0, 0, 5]}
+        />
+      </mesh>
+      <pointerMove onPointerMove={handlePointerMove} />
+    </>
+  );
 };
 
-export default Data;
+const App = () => {
+  return (
+    <div>
+      <Canvas>
+        <ambientLight />
+        <pointLight position={[10, 10, 10]} />
+        <InteractiveCubes />
+      </Canvas>
+    </div>
+  );
+};
+
+export default App;
