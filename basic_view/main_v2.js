@@ -53,216 +53,136 @@ camera.position.z = 5;
 // animate();
 
 const jsonData = {
-  sensor_data: [
-    {
-      gyroscope: {
-        x: -4,
-        y: -1,
-        z: 0,
+  "sensor_data": [
+      {
+          "gyroscope": {
+              "x": -4,
+              "y": -1,
+              "z": 0
+          },
+          "timestamp": 1702472747.7382145
       },
-      timestamp: 1702410092.9506986,
-    },
-    {
-      gyroscope: {
-        x: -4,
-        y: -1,
-        z: 0,
+      {
+          "gyroscope": {
+              "x": -4,
+              "y": -1,
+              "z": 0
+          },
+          "timestamp": 1702472748.7470927
       },
-      timestamp: 1702410093.9596395,
-    },
-    {
-      gyroscope: {
-        x: -4,
-        y: 0,
-        z: 2,
+      {
+          "gyroscope": {
+              "x": -23,
+              "y": -41,
+              "z": -34
+          },
+          "timestamp": 1702472749.7558815
       },
-      timestamp: 1702410094.9685519,
-    },
-    {
-      gyroscope: {
-        x: 10,
-        y: -35,
-        z: 0,
+      {
+          "gyroscope": {
+              "x": -8,
+              "y": -88,
+              "z": -32
+          },
+          "timestamp": 1702472750.7647488
       },
-      timestamp: 1702410095.977557,
-    },
-    {
-      gyroscope: {
-        x: 26,
-        y: 18,
-        z: 9,
+      {
+          "gyroscope": {
+              "x": -35,
+              "y": 34,
+              "z": -4
+          },
+          "timestamp": 1702472751.7817864
       },
-      timestamp: 1702410096.9969535,
-    },
-    {
-      gyroscope: {
-        x: 3,
-        y: 24,
-        z: 0,
+      {
+          "gyroscope": {
+              "x": -45,
+              "y": -5,
+              "z": 36
+          },
+          "timestamp": 1702472752.8089538
       },
-      timestamp: 1702410098.0224729,
-    },
-    {
-      gyroscope: {
-        x: -78,
-        y: -21,
-        z: -39,
+      {
+          "gyroscope": {
+              "x": -41,
+              "y": -8,
+              "z": 56
+          },
+          "timestamp": 1702472753.829953
       },
-      timestamp: 1702410099.043644,
-    },
-    {
-      gyroscope: {
-        x: -10,
-        y: 7,
-        z: 8,
+      {
+          "gyroscope": {
+              "x": 29,
+              "y": -45,
+              "z": 18
+          },
+          "timestamp": 1702472754.8510377
       },
-      timestamp: 1702410100.0649433,
-    },
-    {
-      gyroscope: {
-        x: -1,
-        y: 2,
-        z: -2,
+      {
+          "gyroscope": {
+              "x": 103,
+              "y": -81,
+              "z": -78
+          },
+          "timestamp": 1702472755.8721051
       },
-      timestamp: 1702410101.0860002,
-    },
-    {
-      gyroscope: {
-        x: -4,
-        y: 3,
-        z: 4,
+      {
+          "gyroscope": {
+              "x": 40,
+              "y": 110,
+              "z": -36
+          },
+          "timestamp": 1702472756.8941088
       },
-      timestamp: 1702410102.107987,
-    },
-    {
-      gyroscope: {
-        x: 25,
-        y: -25,
-        z: 6,
+      {
+          "gyroscope": {
+              "x": -48,
+              "y": -13,
+              "z": 21
+          },
+          "timestamp": 1702472757.9194376
       },
-      timestamp: 1702410103.133729,
-    },
-    {
-      gyroscope: {
-        x: -6,
-        y: -19,
-        z: -2,
+      {
+          "gyroscope": {
+              "x": -27,
+              "y": 84,
+              "z": 48
+          },
+          "timestamp": 1702472758.9411047
       },
-      timestamp: 1702410104.155419,
-    },
-    {
-      gyroscope: {
-        x: -28,
-        y: -25,
-        z: -20,
+      {
+          "gyroscope": {
+              "x": 26,
+              "y": -76,
+              "z": 12
+          },
+          "timestamp": 1702472759.962777
       },
-      timestamp: 1702410105.1772778,
-    },
-    {
-      gyroscope: {
-        x: 0,
-        y: -7,
-        z: 3,
+      {
+          "gyroscope": {
+              "x": -20,
+              "y": 40,
+              "z": -25
+          },
+          "timestamp": 1702472760.9845905
       },
-      timestamp: 1702410106.199061,
-    },
-    {
-      gyroscope: {
-        x: -1,
-        y: 20,
-        z: -2,
+      {
+          "gyroscope": {
+              "x": 0,
+              "y": -5,
+              "z": 35
+          },
+          "timestamp": 1702472762.0065055
       },
-      timestamp: 1702410107.220942,
-    },
-    {
-      gyroscope: {
-        x: -11,
-        y: 25,
-        z: 6,
-      },
-      timestamp: 1702410108.2473538,
-    },
-    {
-      gyroscope: {
-        x: -7,
-        y: -3,
-        z: 0,
-      },
-      timestamp: 1702410109.2694798,
-    },
-    {
-      gyroscope: {
-        x: -17,
-        y: -8,
-        z: 3,
-      },
-      timestamp: 1702410110.291801,
-    },
-    {
-      gyroscope: {
-        x: 27,
-        y: -28,
-        z: -2,
-      },
-      timestamp: 1702410111.314128,
-    },
-    {
-      gyroscope: {
-        x: -21,
-        y: -16,
-        z: -6,
-      },
-      timestamp: 1702410112.3368447,
-    },
-    {
-      gyroscope: {
-        x: 1,
-        y: -13,
-        z: -6,
-      },
-      timestamp: 1702410113.3631215,
-    },
-    {
-      gyroscope: {
-        x: -2,
-        y: -3,
-        z: -11,
-      },
-      timestamp: 1702410114.3860452,
-    },
-    {
-      gyroscope: {
-        x: 12,
-        y: -65,
-        z: -36,
-      },
-      timestamp: 1702410115.4090462,
-    },
-    {
-      gyroscope: {
-        x: -4,
-        y: -2,
-        z: 0,
-      },
-      timestamp: 1702410116.4321952,
-    },
-    {
-      gyroscope: {
-        x: -4,
-        y: -1,
-        z: 0,
-      },
-      timestamp: 1702410117.4555097,
-    },
-    {
-      gyroscope: {
-        x: -4,
-        y: -1,
-        z: 0,
-      },
-      timestamp: 1702410118.4833345,
-    },
-  ],
+      {
+          "gyroscope": {
+              "x": -4,
+              "y": -1,
+              "z": 0
+          },
+          "timestamp": 1702472763.0327394
+      }
+  ]
 };
 
 // Create a variable to store the current rotation
@@ -276,12 +196,12 @@ async function animate() {
   for (let i = 0; i < jsonData.sensor_data.length; i++) {
     const latestData = jsonData.sensor_data[i].gyroscope;
 
-    // currentRotation.x += latestData.x * 0.0001; // Adjust the scaling factor as needed
-    // // currentRotation.x += 1 * 0.001;
-    // currentRotation.y += latestData.y * 0.0001;
-    // // currentRotation.y += 1 * 0.001;
-    // currentRotation.z += latestData.z * 0.0001;
-    // // currentRotation.z += 1 * 0.001;
+    currentRotation.x += latestData.x * 0.0001; // Adjust the scaling factor as needed
+    // currentRotation.x += 1 * 0.001;
+    currentRotation.y += latestData.y * 0.0001;
+    // currentRotation.y += 1 * 0.001;
+    currentRotation.z += latestData.z * 0.0001;
+    // currentRotation.z += 1 * 0.001;
 
     cube.rotation.x = currentRotation.x;
     cube.rotation.y = currentRotation.y;
