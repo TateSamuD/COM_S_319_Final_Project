@@ -40,7 +40,7 @@ def read_and_save():
             temperature = round(sensor.get_temp())  # Round temperature to the nearest whole number
 
             # Round accelerometer and gyroscope readings to the nearest whole number
-            # accel_rounded = {axis: round(value) for axis, value in accel.items()}
+            accel_rounded = {axis: round(value) for axis, value in accel.items()}
             gyro_rounded = {axis: round(value) for axis, value in gyro.items()}
 
             # Create a dictionary to store the rounded data
